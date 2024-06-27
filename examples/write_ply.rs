@@ -1,6 +1,8 @@
 extern crate ply_rs;
-use ply_rs::ply::{ Ply, DefaultElement, Encoding, ElementDef, PropertyDef, PropertyType, ScalarType, Property, Addable };
-use ply_rs::writer::{ Writer };
+use ply_rs::ply::{
+    DefaultElement, ElementDef, Encoding, Ply, Property, PropertyDef, PropertyType, ScalarType,
+};
+use ply_rs::writer::Writer;
 
 /// Demonstrates simplest use case for reading from a file.
 fn main() {
@@ -15,12 +17,12 @@ fn main() {
 
         // Define the elements we want to write. In our case we write a 2D Point.
         // When writing, the `count` will be set automatically to the correct value by calling `make_consistent`
-        let mut point_element = ElementDef::new("point".to_string());
-        let p = PropertyDef::new("x".to_string(), PropertyType::Scalar(ScalarType::Float));
-        point_element.properties.add(p);
-        let p = PropertyDef::new("y".to_string(), PropertyType::Scalar(ScalarType::Float));
-        point_element.properties.add(p);
-        ply.header.elements.add(point_element);
+        let mut point_element = ElementDef::new("point");
+        let p = PropertyDef::new("x", PropertyType::Scalar(ScalarType::Float));
+        point_element.properties.push(p);
+        let p = PropertyDef::new("y", PropertyType::Scalar(ScalarType::Float));
+        point_element.properties.push(p);
+        ply.header.elements.push(point_element);
 
         // Add data
         let mut points = Vec::new();
@@ -33,7 +35,7 @@ fn main() {
 
         // Add second point
         let mut point = DefaultElement::new();
-        point.insert("x".to_string(), Property::Float(6.28));
+        point.insert("x".to_string(), Property::Float(6.25));
         point.insert("y".to_string(), Property::Float(-1.42));
         points.push(point);
 

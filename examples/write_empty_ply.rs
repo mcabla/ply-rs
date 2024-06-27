@@ -1,6 +1,6 @@
 extern crate ply_rs;
-use ply_rs::ply::{ Ply, DefaultElement };
-use ply_rs::writer::{ Writer };
+use ply_rs::ply::{DefaultElement, Ply};
+use ply_rs::writer::Writer;
 
 /// Demonstrates simplest use case for reading from a file.
 fn main() {

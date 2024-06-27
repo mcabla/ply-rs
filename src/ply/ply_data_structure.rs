@@ -1,13 +1,13 @@
-use std::fmt::{ Display, Formatter };
-use std::fmt;
-use super::PropertyType;
 use super::KeyMap;
 use super::PropertyAccess;
+use super::PropertyType;
+use std::fmt;
+use std::fmt::{Display, Formatter};
 
 /// Models all necessary information to interact with a PLY file.
 ///
 /// The generic parameter `E` is the element type used to store the payload data.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Ply<E: PropertyAccess> {
     /// All header information found in a PLY file.
     pub header: Header,
@@ -29,6 +29,7 @@ pub struct Ply<E: PropertyAccess> {
     /// ```
     pub payload: Payload<E>,
 }
+
 impl<E: PropertyAccess> Ply<E> {
     /// Creates a new `Ply<E>`.
     pub fn new() -> Self {
@@ -55,9 +56,15 @@ pub struct Header {
     pub version: Version,
     pub obj_infos: Vec<ObjInfo>,
     /// Ordered map of elements as they appear in the payload.
-    pub elements: KeyMap<ElementDef>,
+    pub elements: Vec<ElementDef>,
     /// File comments.
     pub comments: Vec<Comment>,
+}
+
+impl Default for Header {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl Header {
@@ -66,9 +73,9 @@ impl Header {
     pub fn new() -> Self {
         Header {
             encoding: Encoding::Ascii,
-            version: Version{major: 1, minor: 0},
+            version: Version { major: 1, minor: 0 },
             obj_infos: Vec::new(),
-            elements: KeyMap::new(),
+            elements: Vec::new(),
             comments: Vec::new(),
         }
     }
@@ -109,13 +116,11 @@ pub enum Encoding {
 
 impl Display for Encoding {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        f.write_str(
-            match *self {
-                Encoding::Ascii => "ascii",
-                Encoding::BinaryBigEndian => "binary_big_endian",
-                Encoding::BinaryLittleEndian => "binary_little_endian",
-            }
-        )
+        f.write_str(match *self {
+            Encoding::Ascii => "ascii",
+            Encoding::BinaryBigEndian => "binary_big_endian",
+            Encoding::BinaryLittleEndian => "binary_little_endian",
+        })
     }
 }
 
@@ -144,8 +149,9 @@ pub struct ElementDef {
     ///
     /// - Point: We can define a point by its three coordinates. Hence we have three properties: x, y, and z. Reasonable types would be float or double.
     /// - Polygon: A polygon can be defined as a list of points. Since the points are stored in a list, we can define a list of indices. Good types would be some of the unsigned integer lists.
-    pub properties: KeyMap<PropertyDef>,
+    pub properties: Vec<PropertyDef>,
 }
+
 impl ElementDef {
     /// Creates a new element definition.
     ///
@@ -154,11 +160,11 @@ impl ElementDef {
     /// You should never need to set `count` manuall, since it is set by the consistency check (see `make_consistent()` of `Ply`).
     ///
     /// No properties are set.
-    pub fn new(name: String) -> Self {
+    pub fn new(name: &str) -> Self {
         ElementDef {
-            name: name,
+            name: name.to_string(),
             count: 0,
-            properties: KeyMap::new(),
+            properties: Vec::new(),
         }
     }
 }
@@ -178,10 +184,10 @@ pub struct PropertyDef {
 
 impl PropertyDef {
     /// Creates a new property definition.
-    pub fn new(name: String, data_type: PropertyType) -> Self {
+    pub fn new(name: &str, data_type: PropertyType) -> Self {
         PropertyDef {
-            name: name,
-            data_type: data_type,
+            name: name.to_string(),
+            data_type,
         }
     }
 }

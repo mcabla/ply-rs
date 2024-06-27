@@ -1,7 +1,6 @@
 extern crate ply_rs;
-use ply_rs::ply;
 use ply_rs::parser;
-
+use ply_rs::ply;
 
 /// We know, what data we want to read, hence we can be more efficient by loading the data into structs.
 #[derive(Debug)] // not necessary for parsing, only for println at end of example.
@@ -11,12 +10,10 @@ struct Vertex {
     z: f32,
 }
 
-
 #[derive(Debug)]
 struct Face {
     vertex_index: Vec<i32>,
 }
-
 
 // The structs need to implement the PropertyAccess trait, otherwise the parser doesn't know how to write to them.
 // Most functions have default, hence you only need to implement, what you expect to need.
@@ -29,8 +26,8 @@ impl ply::PropertyAccess for Vertex {
             z: 0.0,
         }
     }
-    fn set_property(&mut self, key: String, property: ply::Property) {
-        match (key.as_ref(), property) {
+    fn set_property(&mut self, key: &str, property: ply::Property) {
+        match (key, property) {
             ("x", ply::Property::Float(v)) => self.x = v,
             ("y", ply::Property::Float(v)) => self.y = v,
             ("z", ply::Property::Float(v)) => self.z = v,
@@ -46,8 +43,8 @@ impl ply::PropertyAccess for Face {
             vertex_index: Vec::new(),
         }
     }
-    fn set_property(&mut self, key: String, property: ply::Property) {
-        match (key.as_ref(), property) {
+    fn set_property(&mut self, key: &str, property: ply::Property) {
+        match (key, property) {
             ("vertex_index", ply::Property::ListInt(vec)) => self.vertex_index = vec,
             (k, _) => panic!("Face: Unexpected key/value combination: key: {}", k),
         }
@@ -74,11 +71,19 @@ fn main() {
     // Depending on the header, read the data into our structs..
     let mut vertex_list = Vec::new();
     let mut face_list = Vec::new();
-    for (_ignore_key, element) in &header.elements {
+    for element in &header.elements {
         // we could also just parse them in sequence, but the file format might change
         match element.name.as_ref() {
-            "vertex" => {vertex_list = vertex_parser.read_payload_for_element(&mut f, &element, &header).unwrap();},
-            "face" => {face_list = face_parser.read_payload_for_element(&mut f, &element, &header).unwrap();},
+            "vertex" => {
+                vertex_list = vertex_parser
+                    .read_payload_for_element(&mut f, element, &header)
+                    .unwrap()
+            }
+            "face" => {
+                face_list = face_parser
+                    .read_payload_for_element(&mut f, element, &header)
+                    .unwrap()
+            }
             _ => panic!("Enexpeced element!"),
         }
     }

@@ -26,9 +26,6 @@
 //! - `Writer` and `Parser` provide you with methods down to the line/element level for nice things like streaming architectures.
 //! - `Ply`, `Writer`, and `Parser` use generics for the element-type. If HashMaps are too slow for you, define your own structs and implement the `PropertyAccess` trait. Data will then be written directly to your target format.
 
-extern crate linked_hash_map;
-extern crate byteorder;
-extern crate peg;
 pub mod parser;
 pub mod ply;
 pub mod writer;

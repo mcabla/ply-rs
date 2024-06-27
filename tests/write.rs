@@ -1,14 +1,14 @@
 extern crate ply_rs;
-use ply_rs::*;
 use ply_rs::ply::*;
-use std::io::{ Read, BufReader };
+use ply_rs::*;
+use std::io::{BufReader, Read};
 
 type Ply = ply::Ply<ply::DefaultElement>;
 
 fn read_buff<T: Read>(mut buf: &mut T) -> Ply {
     let p = parser::Parser::new();
     let ply = p.read_ply(&mut buf);
-    assert!(ply.is_ok(), format!("failed: {}", ply.err().unwrap()));
+    assert!(ply.is_ok(), "failed: {}", ply.err().unwrap());
     ply.unwrap()
 }
 
@@ -21,7 +21,7 @@ fn write_buff(ply: &Ply) -> Vec<u8> {
 
 fn read_write_ply(ply: &Ply) -> Ply {
     println!("writing ply:\n{:?}", ply);
-    let ve : Vec<u8> = write_buff(&ply);
+    let ve: Vec<u8> = write_buff(ply);
     let txt = String::from_utf8(ve.clone()).unwrap();
     println!("written ply:\n{}", txt);
     let mut buff = BufReader::new(&(*ve));
@@ -40,12 +40,12 @@ fn create_min() -> Ply {
 
 fn create_basic_header() -> Ply {
     let mut ply = Ply::new();
-    let p = PropertyDef::new("x".to_string(), PropertyType::Scalar(ScalarType::Int));
-    let mut e = ElementDef::new("point".to_string());
-    e.properties.add(p);
+    let p = PropertyDef::new("x", PropertyType::Scalar(ScalarType::Int));
+    let mut e = ElementDef::new("point");
+    e.properties.push(p);
     let c = "Hi, I'm your friendly comment.".to_string();
     let oi = "And I'm your object information.".to_string();
-    ply.header.elements.add(e);
+    ply.header.elements.push(e);
     ply.header.comments.push(c);
     ply.header.obj_infos.push(oi);
     assert!(ply.make_consistent().is_ok());
@@ -55,11 +55,11 @@ fn create_basic_header() -> Ply {
 fn create_single_elements() -> Ply {
     let mut ply = Ply::new();
 
-    let mut e = ElementDef::new("point".to_string());
-    let p = PropertyDef::new("x".to_string(), PropertyType::Scalar(ScalarType::Int));
-    e.properties.add(p);
-    let p = PropertyDef::new("y".to_string(), PropertyType::Scalar(ScalarType::UInt));
-    e.properties.add(p);
+    let mut e = ElementDef::new("point");
+    let p = PropertyDef::new("x", PropertyType::Scalar(ScalarType::Int));
+    e.properties.push(p);
+    let p = PropertyDef::new("y", PropertyType::Scalar(ScalarType::UInt));
+    e.properties.push(p);
 
     let mut list = Vec::new();
     let mut pe = KeyMap::new();
@@ -74,7 +74,7 @@ fn create_single_elements() -> Ply {
 
     let c = "Hi, I'm your friendly comment.".to_string();
     let oi = "And I'm your object information.".to_string();
-    ply.header.elements.add(e);
+    ply.header.elements.push(e);
     ply.header.comments.push(c);
     ply.header.obj_infos.push(oi);
     assert!(ply.make_consistent().is_ok());
@@ -83,9 +83,9 @@ fn create_single_elements() -> Ply {
 fn create_list_elements() -> Ply {
     let mut ply = Ply::new();
 
-    let mut e = ElementDef::new("aList".to_string());
-    let p = PropertyDef::new("x".to_string(), PropertyType::List(ScalarType::Int, ScalarType::Int));
-    e.properties.add(p);
+    let mut e = ElementDef::new("aList");
+    let p = PropertyDef::new("x", PropertyType::List(ScalarType::Int, ScalarType::Int));
+    e.properties.push(p);
 
     let mut list = Vec::new();
     let mut pe = KeyMap::new();
@@ -98,7 +98,7 @@ fn create_list_elements() -> Ply {
 
     let c = "Hi, I'm your friendly comment.".to_string();
     let oi = "And I'm your object information.".to_string();
-    ply.header.elements.add(e);
+    ply.header.elements.push(e);
     ply.header.comments.push(c);
     ply.header.obj_infos.push(oi);
     assert!(ply.make_consistent().is_ok());
