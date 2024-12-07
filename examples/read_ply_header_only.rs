@@ -1,5 +1,5 @@
-extern crate ply_rs;
-use ply_rs as ply;
+extern crate ply_rs_bw;
+use ply_rs_bw as ply;
 
 /// Sometimes only the meta data is interesting to us.
 /// Reading the entire ply file would be a waste of ressources.

@@ -1,14 +1,14 @@
-extern crate ply_rs;
-use ply_rs::*;
-use ply_rs::ply::*;
+extern crate ply_rs_bw;
+use ply_rs_bw::*;
+use ply_rs_bw::ply::*;
 use std::io::{ Read, BufReader };
 
-type Ply = ply::Ply<ply::DefaultElement>;
+type Ply = ply::Ply<DefaultElement>;
 
 fn read_buff<T: Read>(mut buf: &mut T) -> Ply {
     let p = parser::Parser::new();
     let ply = p.read_ply(&mut buf);
-    assert!(ply.is_ok(), format!("failed: {}", ply.err().unwrap()));
+    assert!(ply.is_ok(), "{}", format!("failed: {}", ply.err().unwrap()));
     ply.unwrap()
 }
 

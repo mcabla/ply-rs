@@ -4,6 +4,12 @@
 [![Build Status](https://travis-ci.org/Fluci/ply-rs.svg?branch=master)](https://travis-ci.org/Fluci/ply-rs)
 [![crates.io](https://img.shields.io/crates/v/ply-rs.svg)](https://crates.io/crates/ply-rs)
 
+This is a forked version of [ply-rs](https://github.com/Fluci/ply-rs) project that fixes the usage of 
+linked-hash-map to address [CVE-2020-25573](https://nvd.nist.gov/vuln/detail/CVE-2020-25573). 
+Bourmir-Wyngs patched the crate in 7 December 2024 for usign in their own projects but have nothing against
+others using it as well. We may make other small maintenance fixes. The crate renamed all over to ply-rs-bw
+and small glitches were fixed to make it Rust edition 2021 - compliant.
+
 Ply-rs is a small library built to read and write the PLY file format (also Polygon File Format, Standford Triangle Format). The library supports all three subformats: ascii, big endian, and little endian.
 
 It focuses on two main points:
@@ -19,13 +25,13 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ply-rs = "0.1.3"
+ply-rs-bw = "0.1.3"
 ```
 
 Add to your root:
 
 ```rust
-extern crate ply_rs;
+extern crate ply_rs_bw;
 
 fn main() {}
 ```
@@ -35,8 +41,8 @@ fn main() {}
 This is the easiest way to read a ply file:
 
 ```rust,no_run
-extern crate ply_rs;
-use ply_rs as ply;
+extern crate ply_rs_bw;
+use ply_rs_bw as ply;
 
 /// Demonstrates simplest use case for reading from a file.
 fn main() {
@@ -66,9 +72,9 @@ fn main() {
 The simplest case of writing a ply file:
 
 ```rust
-extern crate ply_rs;
-use ply_rs::ply::{ Ply, DefaultElement };
-use ply_rs::writer::{ Writer };
+extern crate ply_rs_bw;
+use ply_rs_bw::ply::{ Ply, DefaultElement };
+use ply_rs_bw::writer::{ Writer };
 
 /// Demonstrates simplest use case for reading from a file.
 fn main() {

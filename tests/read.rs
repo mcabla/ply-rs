@@ -1,5 +1,5 @@
-extern crate ply_rs;
-use ply_rs::*;
+extern crate ply_rs_bw;
+use ply_rs_bw::*;
 
 type Ply = ply::Ply<ply::DefaultElement>;
 
@@ -7,7 +7,7 @@ fn read_file(path: &str) -> Ply {
     let mut f = std::fs::File::open(path).unwrap();
     let p = parser::Parser::new();
     let ply = p.read_ply(&mut f);
-    assert!(ply.is_ok(), format!("failed: {}", ply.err().unwrap()));
+    assert!(ply.is_ok(), "{}", format!("failed: {}", ply.err().unwrap()));
     ply.unwrap()
 }
 

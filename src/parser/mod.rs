@@ -39,7 +39,7 @@ use std::marker::PhantomData;
 /// The most common case is probably to read from a file:
 ///
 /// ```rust
-/// # use ply_rs::*;
+/// # use ply_rs_bw::*;
 /// // set up a reader, in this case a file.
 /// let path = "example_plys/greg_turk_example1_ok_ascii.ply";
 /// let mut f = std::fs::File::open(path).unwrap();
@@ -60,7 +60,7 @@ use std::marker::PhantomData;
 /// We need to build a Ply our selves.
 ///
 /// ```rust
-/// # use ply_rs::*;
+/// # use ply_rs_bw::*;
 /// // set up a reader as before.
 /// // let mut f = ... ;
 /// # let path = "example_plys/greg_turk_example1_ok_ascii.ply";
@@ -176,7 +176,7 @@ impl<E: PropertyAccess> Parser<E> {
         }
         match grammar::line(&line_str) {
             Err(e) => return Err(io::Error::new(ErrorKind::InvalidInput, e)),
-            Ok(l @ Line::MagicNumber) => (l),
+            Ok(l @ Line::MagicNumber) => l,
             Ok(ob) => return Err(io::Error::new(
                 ErrorKind::InvalidInput,
                 format!("Invalid line encountered. Expected type: 'Line::MagicNumber', found: '{:?}'", ob)
@@ -196,7 +196,7 @@ impl<E: PropertyAccess> Parser<E> {
             match line {
                 Err(e) => return parse_ascii_rethrow(location, &line_str, e, "Couldn't parse line."),
                 Ok(Line::MagicNumber) => return parse_ascii_error(location, &line_str, "Unexpected 'ply' found."),
-                Ok(Line::Format(ref t)) => (
+                Ok(Line::Format(ref t)) =>
                     if header_form_ver.is_none() {
                         header_form_ver = Some(t.clone());
                     } else {
@@ -214,17 +214,17 @@ impl<E: PropertyAccess> Parser<E> {
                             )
                         }
                     }
-                ),
-                Ok(Line::ObjInfo(ref o)) => (
+                ,
+                Ok(Line::ObjInfo(ref o)) =>
                     header_obj_infos.push(o.clone())
-                ),
-                Ok(Line::Comment(ref c)) => (
+                ,
+                Ok(Line::Comment(ref c)) =>
                     header_comments.push(c.clone())
-                ),
+                ,
                 Ok(Line::Element(ref e)) => {
                     header_elements.add(e.clone())
                 },
-                Ok(Line::Property(p)) => (
+                Ok(Line::Property(p)) =>
                     if header_elements.is_empty() {
                         return parse_ascii_error(
                             location,
@@ -236,7 +236,7 @@ impl<E: PropertyAccess> Parser<E> {
                         e.properties.add(p);
                         header_elements.add(e);
                     }
-                ),
+                ,
                 Ok(Line::EndHeader) => { location.next_line(); break 'readlines; },
             };
             location.next_line();
@@ -627,7 +627,7 @@ mod tests {
         elem_def.properties = prop;
 
         let properties = p.read_ascii_element(&txt, &elem_def);
-        assert!(properties.is_ok(), format!("error: {:?}", properties));
+        assert!(properties.is_ok(), "{}", format!("error: {:?}", properties));
     }
     #[test]
     fn magic_number_ok() {

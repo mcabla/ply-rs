@@ -21,7 +21,7 @@ pub struct Ply<E: PropertyAccess> {
     /// Assume you have a `Ply` object called `ply` and want to access the third `point` element:
     ///
     /// ```rust,no_run
-    /// # use ply_rs::ply::{Ply, DefaultElement};
+    /// # use ply_rs_bw::ply::{Ply, DefaultElement};
     /// # let ply = Ply::<DefaultElement>::new();
     /// // get ply from somewhere ...
     /// let ref a_point = ply.payload["point"][2];

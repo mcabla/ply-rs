@@ -20,8 +20,8 @@ use crate::ply::PropertyAccess;
 /// Simplest case of writing an entire PLY file en bloc:
 ///
 /// ```rust
-/// # use ply_rs::ply::{Ply, DefaultElement};
-/// # use ply_rs::writer::Writer;
+/// # use ply_rs_bw::ply::{Ply, DefaultElement};
+/// # use ply_rs_bw::writer::Writer;
 /// // Get a Ply from somewhere
 /// // let mut ply = ...;
 /// # let mut ply = Ply::<DefaultElement>::new();

@@ -1,6 +1,6 @@
-extern crate ply_rs;
-use ply_rs::ply;
-use ply_rs::parser;
+extern crate ply_rs_bw;
+use ply_rs_bw::ply;
+use ply_rs_bw::parser;
 
 
 /// We know, what data we want to read, hence we can be more efficient by loading the data into structs.

@@ -1,5 +1,5 @@
-extern crate ply_rs;
-use ply_rs as ply;
+extern crate ply_rs_bw;
+use ply_rs_bw as ply;
 
 /// Demonstrates simplest use case for reading from a file.
 fn main() {
