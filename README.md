@@ -1,12 +1,14 @@
 # Ply-rs
-
-[Documentation](https://fluci.github.io/travis_docs/ply-rs/ply_rs/index.html) |
-[![Build Status](https://travis-ci.org/Fluci/ply-rs.svg?branch=master)](https://travis-ci.org/Fluci/ply-rs)
-[![crates.io](https://img.shields.io/crates/v/ply-rs.svg)](https://crates.io/crates/ply-rs)
+[![GitHub](https://img.shields.io/badge/GitHub-777777)](https://github.com/bourumir-wyngs/ply-rs-bw)
+[![crates.io](https://img.shields.io/crates/v/rs-opw-kinematics.svg)](https://crates.io/crates/ply-rs-bw)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bourumir-wyngs/rs-opw-kinematics/rust.yml)](https://github.com/bourumir-wyngs/ply-rs-bw/actions)
+[![crates.io](https://img.shields.io/crates/l/rs-opw-kinematics.svg)](https://crates.io/crates/ply-rs-bw)
+[![crates.io](https://img.shields.io/crates/d/rs-opw-kinematics.svg)](https://crates.io/crates/ply-rs-bw)
+[![docs.rs](https://docs.rs/rs-opw-kinematics/badge.svg)](https://docs.rs/rs-opw-kinematics)
 
 This is a forked version of [ply-rs](https://github.com/Fluci/ply-rs) project that fixes the usage of 
 linked-hash-map to address [CVE-2020-25573](https://nvd.nist.gov/vuln/detail/CVE-2020-25573). 
-Bourmir-Wyngs patched the crate in 7 December 2024 for usign in their own projects but have nothing against
+Bourmir-Wyngs patched the crate in 7 December 2024 for using in their own projects but have nothing against
 others using it as well. We may make other small maintenance fixes. The crate renamed all over to ply-rs-bw
 and small glitches were fixed to make it Rust edition 2021 - compliant.
 
