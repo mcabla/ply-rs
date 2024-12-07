@@ -1,10 +1,10 @@
 # Ply-rs
 [![GitHub](https://img.shields.io/badge/GitHub-777777)](https://github.com/bourumir-wyngs/ply-rs-bw)
 [![crates.io](https://img.shields.io/crates/v/ply-rs.svg)](https://crates.io/crates/ply-rs-bw)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bourumir-wyngs/ply-rs/rust.yml)](https://github.com/bourumir-wyngs/ply-rs-bw/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bourumir-wyngs/ply-rs-bw/rust.yml)](https://github.com/bourumir-wyngs/ply-rs-bw/actions)
 [![crates.io](https://img.shields.io/crates/l/ply-rs.svg)](https://crates.io/crates/ply-rs-bw)
 [![crates.io](https://img.shields.io/crates/d/ply-rs.svg)](https://crates.io/crates/ply-rs-bw)
-[![docs.rs](https://docs.rs/ply-rs/badge.svg)](https://docs.rs/ply-rs)
+[![docs.rs](https://docs.rs/ply-rs/badge.svg)](https://docs.rs/ply-rs-bw)
 
 This is a forked version of [ply-rs](https://github.com/Fluci/ply-rs) project that fixes the usage of 
 linked-hash-map to address [CVE-2020-25573](https://nvd.nist.gov/vuln/detail/CVE-2020-25573). We may make other small maintenance fixes. The crate renamed all over to ply-rs-bw
