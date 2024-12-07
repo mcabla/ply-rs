@@ -1,7 +1,7 @@
 [package]
 name = "ply-rs-bw"
 version = "0.1.3"
-authors = ["Felice Serena <felice@serena-mueller.ch>","Bourumir Wyngs"]
+authors = ["Felice Serena <felice@serena-mueller.ch>","Bourumir Wyngs<use@github_to_contact"]
 repository = "https://github.com/bourumir-wyngs/ply-rs"
 homepage = "https://github.com/bourumir-wyngs/ply-rs"
 license = "MIT"
