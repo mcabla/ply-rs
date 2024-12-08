@@ -7,9 +7,15 @@
 [![docs.rs](https://docs.rs/ply-rs-bw/badge.svg)](https://docs.rs/ply-rs-bw)
 [![Dependency Vulnerabilities](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi-hooks.soos.io%2Fapi%2Fshieldsio-badges%3FbadgeType%3DDependencyVulnerabilities%26pid%3Dkyhfgom8c%26)](https://app.soos.io)
 
-This is a forked version of [ply-rs](https://github.com/Fluci/ply-rs) project that fixes the usage of 
-linked-hash-map to address [CVE-2020-25573](https://nvd.nist.gov/vuln/detail/CVE-2020-25573). We may make other small maintenance fixes. The crate renamed all over to ply-rs-bw
-and small glitches were fixed to make it Rust edition 2021 - compliant.
+This is a forked version of the [ply-rs](https://github.com/Fluci/ply-rs) project that addresses the use of
+`linked-hash-map` to resolve [CVE-2020-25573](https://nvd.nist.gov/vuln/detail/CVE-2020-25573). Other small
+maintenance fixes may also be included.
+
+The crate has been renamed to `ply-rs-bw`, and minor issues were resolved to ensure compatibility with Rust 2021
+edition. Additionally, an example has been added to demonstrate how to read PLY files with diverse field types
+(e.g., `f32` vs `f64`, `u32` vs `i32`, etc.). Semantic versioning is now adopted for consistent version management.
+
+***
 
 Ply-rs is a small library built to read and write the PLY file format (also Polygon File Format, Standford Triangle Format). The library supports all three subformats: ascii, big endian, and little endian.
 
@@ -26,7 +32,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ply-rs-bw = "0.1.3"
+ply-rs-bw = "1.0.0"
 ```
 
 Add to your root:

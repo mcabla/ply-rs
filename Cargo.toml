@@ -1,6 +1,6 @@
 [package]
 name = "ply-rs-bw"
-version = "0.1.4"
+version = "1.0.0"
 authors = ["Felice Serena <felice@serena-mueller.ch>","Bourumir Wyngs<use@github_to_contact"]
 repository = "https://github.com/bourumir-wyngs/ply-rs"
 homepage = "https://github.com/bourumir-wyngs/ply-rs"
@@ -38,6 +38,9 @@ name = "read_ply_header_only"
 
 [[example]]
 name = "read_ply_to_structs"
+
+[[example]]
+name = "read_diverse_field_types"
 
 [[example]]
 name = "write_empty_ply"
