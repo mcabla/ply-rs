@@ -20,14 +20,24 @@ jobs:
       run: cargo clean
     - name: Build
       run: cargo build --verbose
+    - name: Clean again 1
+      run: cargo clean
     - name: Run tests
       run: cargo test --verbose
+    - name: Clean again 2
+      run: cargo clean
     - name: Build without features
       run: cargo build --no-default-features --verbose
+    - name: Clean again 3
+      run: cargo clean
     - name: Run tests without features
       run: cargo test --no-default-features --verbose
+    - name: Clean again 4
+      run: cargo clean
     - name: Build all examples
       run: cargo build --examples
+    - name: Clean again 5
+      run: cargo clean
     - name: Build all examples no default features
       run: cargo build --examples --no-default-features
 
