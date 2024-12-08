@@ -326,7 +326,7 @@ use std::marker;
 /// # Ascii
 impl<E: PropertyAccess> Parser<E> {
     fn __read_ascii_payload_for_element<T: BufRead>(&self, reader: &mut T, location: &mut LocationTracker, element_def: &ElementDef) -> Result<Vec<E>> {
-        let mut elems = Vec::<E>::new();
+        let mut elems = Vec::<E>::with_capacity(element_def.count);
         let mut line_str = String::new();
         for _ in 0..element_def.count {
             line_str.clear();
@@ -409,7 +409,7 @@ impl<E: PropertyAccess> Parser<E> {
     }
     fn __read_ascii_list<D: FromStr>(&self, elem_iter: &mut Iter<String>, count: usize) -> Result<Vec<D>>
         where <D as FromStr>::Err: error::Error + marker::Send + marker::Sync + 'static {
-        let mut list = Vec::<D>::new();
+        let mut list = Vec::<D>::with_capacity(count);
         for i in 0..count {
             let s : &String = match elem_iter.next() {
                 None => return Err(io::Error::new(
@@ -467,7 +467,7 @@ impl<E: PropertyAccess> Parser<E> {
     }
 
     fn __read_binary_payload_for_element<T: Read, B: ByteOrder>(&self, reader: &mut T, location: &mut LocationTracker, element_def: &ElementDef) -> Result<Vec<E>> {
-        let mut elems = Vec::<E>::new();
+        let mut elems = Vec::<E>::with_capacity(element_def.count);
         for _ in 0..element_def.count {
             let element = self.__read_binary_element::<T, B>(reader, element_def)?;
             elems.push(element);
@@ -523,7 +523,7 @@ impl<E: PropertyAccess> Parser<E> {
     }
     fn __read_binary_list<T: Read, D: FromStr>(&self, reader: &mut T, read_from: &dyn Fn(&mut T) -> Result<D>, count: usize) -> Result<Vec<D>>
         where <D as FromStr>::Err: error::Error + marker::Send + marker::Sync + 'static {
-        let mut list = Vec::<D>::new();
+        let mut list = Vec::<D>::with_capacity(count);
         for i in 0..count {
             let value : D = match read_from(reader) {
                 Err(e) => return Err(io::Error::new(
