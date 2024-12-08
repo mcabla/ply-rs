@@ -18,7 +18,8 @@ impl<V: Key> Addable<V> for KeyMap<V> {
     }
 }
 
-/// Convenience trait to assure consistency between the key used for storage and the name of the elment.
+/// Convenience trait to assure consistency between the key used for storage and the name
+/// of the element.
 pub trait Key {
     /// Returns a key under which the element should be stored in a key-value store.
     fn get_key(&self) -> String;
