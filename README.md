@@ -1,7 +1,7 @@
 # Ply-rs
-[![GitHub](https://img.shields.io/badge/GitHub-777777)](https://github.com/bourumir-wyngs/ply-rs-bw)
+[![GitHub](https://img.shields.io/badge/GitHub-777777)](https://github.com/bourumir-wyngs/ply-rs)
 [![crates.io](https://img.shields.io/crates/v/ply-rs.svg)](https://crates.io/crates/ply-rs-bw)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bourumir-wyngs/ply-rs-bw/rust.yml)](https://github.com/bourumir-wyngs/ply-rs-bw/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bourumir-wyngs/ply-rs/rust.yml)](https://github.com/bourumir-wyngs/ply-rs/actions)
 [![crates.io](https://img.shields.io/crates/l/ply-rs-bw.svg)](https://crates.io/crates/ply-rs-bw)
 [![crates.io](https://img.shields.io/crates/d/ply-rs-bw.svg)](https://crates.io/crates/ply-rs-bw)
 [![docs.rs](https://docs.rs/ply-rs-bw/badge.svg)](https://docs.rs/ply-rs-bw)
