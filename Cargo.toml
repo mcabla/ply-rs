@@ -1,6 +1,6 @@
 [package]
 name = "ply-rs-bw"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Felice Serena <felice@serena-mueller.ch>","Bourumir Wyngs<use@github_to_contact"]
 repository = "https://github.com/bourumir-wyngs/ply-rs"
 homepage = "https://github.com/bourumir-wyngs/ply-rs"
@@ -17,7 +17,7 @@ exclude = [
 edition = "2021"
 
 [dependencies]
-linked-hash-map = "^0.5.6"
+hashlink = "0.9.1"
 byteorder = "^1.5"
 peg = "^0.8.4"
 

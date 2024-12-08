@@ -1,4 +1,4 @@
-use linked_hash_map::LinkedHashMap;
+use hashlink::LinkedHashMap;
 use super::ElementDef;
 use super::PropertyDef;
 
