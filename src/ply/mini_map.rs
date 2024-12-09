@@ -54,7 +54,7 @@ impl<K, V> MiniMap<K, V> {
     }
 
     #[inline]
-     fn with_capacity(capacity: usize) -> Self {
+     pub fn with_capacity(capacity: usize) -> Self {
         Self {
             hash_builder: DefaultHashBuilder::default(),
             table: HashTable::with_capacity(capacity),
@@ -366,23 +366,6 @@ where
             RawEntryMut::Vacant(_) => None,
         }
     }
-
-    #[inline]
-     fn reserve(&mut self, additional: usize) {
-        let hash_builder = &self.hash_builder;
-        self.table
-            .reserve(additional, move |&n| unsafe { hash_node(hash_builder, n) });
-    }
-
-    #[inline]
-     fn shrink_to_fit(&mut self) {
-        let hash_builder = &self.hash_builder;
-        unsafe {
-            self.table
-                .shrink_to_fit(move |&n| hash_node(hash_builder, n));
-            drop_free_nodes(self.free.take());
-        }
-    }
 }
 
 impl<K, V, S> MiniMap<K, V, S>
@@ -564,73 +547,12 @@ where
     Vacant(VacantEntry<'a, K, V, S>),
 }
 
-impl<K: fmt::Debug, V: fmt::Debug, S> fmt::Debug for Entry<'_, K, V, S> {
+impl<K: fmt::Debug, V: fmt::Debug, S: std::fmt::Debug> fmt::Debug for Entry<'_, K, V, S> {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             Entry::Vacant(ref v) => f.debug_tuple("Entry").field(v).finish(),
             Entry::Occupied(ref o) => f.debug_tuple("Entry").field(o).finish(),
-        }
-    }
-}
-
-impl<'a, K, V, S> Entry<'a, K, V, S> {
-    /// If this entry is vacant, inserts a new entry with the given value and returns a reference to
-    /// it.
-    ///
-    /// If this entry is occupied, this method *moves the occupied entry to the back of the internal
-    /// linked list* and returns a reference to the existing value.
-    #[inline]
-     fn or_insert(self, default: V) -> &'a mut V
-    where
-        K: Hash,
-        S: BuildHasher,
-    {
-        match self {
-            Entry::Occupied(mut entry) => {
-                entry.to_back();
-                entry.into_mut()
-            }
-            Entry::Vacant(entry) => entry.insert(default),
-        }
-    }
-
-    /// Similar to `Entry::or_insert`, but accepts a function to construct a new value if this entry
-    /// is vacant.
-    #[inline]
-     fn or_insert_with<F: FnOnce() -> V>(self, default: F) -> &'a mut V
-    where
-        K: Hash,
-        S: BuildHasher,
-    {
-        match self {
-            Entry::Occupied(mut entry) => {
-                entry.to_back();
-                entry.into_mut()
-            }
-            Entry::Vacant(entry) => entry.insert(default()),
-        }
-    }
-
-    #[inline]
-     fn key(&self) -> &K {
-        match *self {
-            Entry::Occupied(ref entry) => entry.key(),
-            Entry::Vacant(ref entry) => entry.key(),
-        }
-    }
-
-    #[inline]
-     fn and_modify<F>(self, f: F) -> Self
-    where
-        F: FnOnce(&mut V),
-    {
-        match self {
-            Entry::Occupied(mut entry) => {
-                f(entry.get_mut());
-                Entry::Occupied(entry)
-            }
-            Entry::Vacant(entry) => Entry::Vacant(entry),
         }
     }
 }
@@ -728,39 +650,10 @@ impl<'a, K, V, S> OccupiedEntry<'a, K, V, S> {
     }
 }
 
- struct VacantEntry<'a, K, V, S> {
+ #[derive(Debug)]
+struct VacantEntry<'a, K, V, S> {
     key: K,
     raw_entry: RawVacantEntryMut<'a, K, V, S>,
-}
-
-impl<K: fmt::Debug, V, S> fmt::Debug for VacantEntry<'_, K, V, S> {
-    #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_tuple("VacantEntry").field(self.key()).finish()
-    }
-}
-
-impl<'a, K, V, S> VacantEntry<'a, K, V, S> {
-    #[inline]
-     fn key(&self) -> &K {
-        &self.key
-    }
-
-    #[inline]
-     fn into_key(self) -> K {
-        self.key
-    }
-
-    /// Insert's the key for this vacant entry paired with the given value as a new entry at the
-    /// *back* of the internal linked list.
-    #[inline]
-     fn insert(self, value: V) -> &'a mut V
-    where
-        K: Hash,
-        S: BuildHasher,
-    {
-        self.raw_entry.insert(self.key, value).1
-    }
 }
 
  struct RawEntryBuilder<'a, K, V, S> {
@@ -898,63 +791,6 @@ where
  enum RawEntryMut<'a, K, V, S> {
     Occupied(RawOccupiedEntryMut<'a, K, V, S>),
     Vacant(RawVacantEntryMut<'a, K, V, S>),
-}
-
-impl<'a, K, V, S> RawEntryMut<'a, K, V, S> {
-    /// Similarly to `Entry::or_insert`, if this entry is occupied, it will move the existing entry
-    /// to the back of the internal linked list.
-    #[inline]
-     fn or_insert(self, default_key: K, default_val: V) -> (&'a mut K, &'a mut V)
-    where
-        K: Hash,
-        S: BuildHasher,
-    {
-        match self {
-            RawEntryMut::Occupied(mut entry) => {
-                entry.to_back();
-                entry.into_key_value()
-            }
-            RawEntryMut::Vacant(entry) => entry.insert(default_key, default_val),
-        }
-    }
-
-    /// Similarly to `Entry::or_insert_with`, if this entry is occupied, it will move the existing
-    /// entry to the back of the internal linked list.
-    #[inline]
-     fn or_insert_with<F>(self, default: F) -> (&'a mut K, &'a mut V)
-    where
-        F: FnOnce() -> (K, V),
-        K: Hash,
-        S: BuildHasher,
-    {
-        match self {
-            RawEntryMut::Occupied(mut entry) => {
-                entry.to_back();
-                entry.into_key_value()
-            }
-            RawEntryMut::Vacant(entry) => {
-                let (k, v) = default();
-                entry.insert(k, v)
-            }
-        }
-    }
-
-    #[inline]
-     fn and_modify<F>(self, f: F) -> Self
-    where
-        F: FnOnce(&mut K, &mut V),
-    {
-        match self {
-            RawEntryMut::Occupied(mut entry) => {
-                {
-                    let (k, v) = entry.get_key_value_mut();
-                    f(k, v);
-                }
-                RawEntryMut::Occupied(entry)
-            }
-            RawEntryMut::Vacant(entry) => RawEntryMut::Vacant(entry),
-        }
-    }
 }
 
  struct RawOccupiedEntryMut<'a, K, V, S> {
