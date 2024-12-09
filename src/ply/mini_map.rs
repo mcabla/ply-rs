@@ -1459,49 +1459,6 @@ impl<K, V> Drop for IntoIter<K, V> {
     }
 }
 
- struct ValuesMut<'a, K, V> {
-    inner: IterMut<'a, K, V>,
-}
-
-impl<K, V> fmt::Debug for ValuesMut<'_, K, V>
-where
-    K: fmt::Debug,
-    V: fmt::Debug,
-{
-    #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_list().entries(self.inner.iter()).finish()
-    }
-}
-
-impl<'a, K, V> Iterator for ValuesMut<'a, K, V> {
-    type Item = &'a mut V;
-
-    #[inline]
-    fn next(&mut self) -> Option<&'a mut V> {
-        self.inner.next().map(|e| e.1)
-    }
-
-    #[inline]
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        self.inner.size_hint()
-    }
-}
-
-impl<'a, K, V> DoubleEndedIterator for ValuesMut<'a, K, V> {
-    #[inline]
-    fn next_back(&mut self) -> Option<&'a mut V> {
-        self.inner.next_back().map(|e| e.1)
-    }
-}
-
-impl<'a, K, V> ExactSizeIterator for ValuesMut<'a, K, V> {
-    #[inline]
-    fn len(&self) -> usize {
-        self.inner.len()
-    }
-}
-
 impl<'a, K, V, S> IntoIterator for &'a MiniMap<K, V, S> {
     type Item = (&'a K, &'a V);
     type IntoIter = Iter<'a, K, V>;
@@ -1767,17 +1724,5 @@ where
     let mut hasher = s.build_hasher();
     k.hash(&mut hasher);
     hasher.finish()
-}
-
-// We do not drop the key and value when a value is filtered from the map during the call to
-// `retain`.  We need to be very careful not to have a live `HashMap` entry pointing to
-// either a dangling `Node` or a `Node` with dropped keys / values.  Since the key and value
-// types may panic on drop, they may short-circuit the entry in the map actually being
-// removed.  Instead, we push the removed nodes onto the free list eagerly, then try and
-// drop the keys and values for any newly freed nodes *after* `HashMap::retain` has
-// completely finished.
-struct DropFilteredValues<'a, K, V> {
-    free: &'a mut Option<NonNull<Node<K, V>>>,
-    cur_free: Option<NonNull<Node<K, V>>>,
 }
 
