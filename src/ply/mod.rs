@@ -14,4 +14,6 @@ mod ply_data_structure;
 pub use self::ply_data_structure::*;
 
 mod property;
+mod mini_map;
+
 pub use self::property::*;

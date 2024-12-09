@@ -1,16 +1,15 @@
-use hashlink::LinkedHashMap;
+use crate::ply::mini_map::MiniMap;
 use super::ElementDef;
 use super::PropertyDef;
 
 /// Alias to reduce coupling with `LinkedHashMap`
-pub type KeyMap<V> = LinkedHashMap<String, V>;
+pub type KeyMap<V> = MiniMap<String, V>;
 
 /// Convenience trait to assure consistency between map key and name attribute of stored element.
 pub trait Addable<V: Key> {
     /// Takes a value that provides a key and stores it under the given key.
     fn add(&mut self, new_value: V);
 }
-
 
 impl<V: Key> Addable<V> for KeyMap<V> {
     fn add(&mut self, value: V) {
