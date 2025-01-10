@@ -387,20 +387,9 @@ impl<E: PropertyAccess> Parser<E> {
     ///
     /// Make sure all elements are parsed in the order they are defined in the header.
     pub fn read_ascii_element(&self, line: &str, element_def: &ElementDef) -> Result<E> {
-        let elems = match grammar::data_line(line) {
-            Ok(e) => e,
-            Err(ref e) => {
-                return Err(io::Error::new(
-                    ErrorKind::InvalidInput,
-                    format!(
-                        "Couldn't parse element line.\n\tString: '{}'\n\tError: {}",
-                        line, e
-                    ),
-                ))
-            }
-        };
+        let elems = crate::parser::Parser::<E>::__fast_data_line_split(line);
 
-        let mut elem_it: Iter<String> = elems.iter();
+        let mut elem_it: Iter<&str> = elems.iter();
         let mut vals = E::new();
         for def in &element_def.properties {
             let new_p: Property = self.__read_ascii_property(&mut elem_it, &def.data_type)?;
@@ -409,9 +398,13 @@ impl<E: PropertyAccess> Parser<E> {
         Ok(vals)
     }
 
+    fn __fast_data_line_split(line: &str) -> Vec<&str> {
+        line.split_ascii_whitespace().collect()
+    }
+
     fn __read_ascii_property(
         &self,
-        elem_iter: &mut Iter<String>,
+        elem_iter: &mut Iter<&str>,
         data_type: &PropertyType,
     ) -> Result<Property> {
         let s: &str = match elem_iter.next() {
@@ -481,7 +474,7 @@ impl<E: PropertyAccess> Parser<E> {
 
     fn __read_ascii_list<D: FromStr>(
         &self,
-        elem_iter: &mut Iter<String>,
+        elem_iter: &mut Iter<&str>,
         count: usize,
     ) -> Result<Vec<D>>
     where
