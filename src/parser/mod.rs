@@ -523,7 +523,7 @@ impl<E: PropertyAccess> Parser<E> {
         element_def: &ElementDef,
     ) -> Result<E> {
         // Reduce coupling with ByteOrder
-        self.__read_binary_element::<T, BigEndian>(reader, element_def)
+        self.read_binary_element::<T, BigEndian>(reader, element_def)
     }
 
     /// Reads a single element as declared in èlement_def. Assumes big endian encoding.
@@ -535,7 +535,7 @@ impl<E: PropertyAccess> Parser<E> {
         element_def: &ElementDef,
     ) -> Result<E> {
         // Reduce coupling with ByteOrder
-        self.__read_binary_element::<T, LittleEndian>(reader, element_def)
+        self.read_binary_element::<T, LittleEndian>(reader, element_def)
     }
 
     /// internal wrapper
@@ -565,14 +565,14 @@ impl<E: PropertyAccess> Parser<E> {
     ) -> Result<Vec<E>> {
         let mut elems = Vec::<E>::with_capacity(element_def.count);
         for _ in 0..element_def.count {
-            let element = self.__read_binary_element::<T, B>(reader, element_def)?;
+            let element = self.read_binary_element::<T, B>(reader, element_def)?;
             elems.push(element);
             location.next_line();
         }
         Ok(elems)
     }
 
-    fn __read_binary_element<T: Read, B: ByteOrder>(
+    pub fn read_binary_element<T: Read, B: ByteOrder>(
         &self,
         reader: &mut T,
         element_def: &ElementDef,
