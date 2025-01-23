@@ -1,7 +1,7 @@
 //! Reads ascii or binary data into a `Ply`.
 
 use std::fmt::Debug;
-use std::{clone, io};
+use std::io;
 use std::io::{BufReader, Read};
 use std::result;
 
